@@ -5,6 +5,9 @@ on:
     - cron: "0 0 * * 1"   # 每周一 0 点（UTC时间）
   workflow_dispatch:
 
+permissions:
+  contents: write  # 关键！给 workflow 赋予写权限，允许自动推送代码
+
 jobs:
   run-scripts:
     runs-on: ubuntu-latest
