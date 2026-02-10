@@ -75,10 +75,11 @@ if __name__ == '__main__':
         rsc.write('/ip dns static\n')
         for d in result:
             rsc.write(f':do {{ add comment=Gfwlist type=FWD forward-to=8.8.8.8 match-subdomain=yes name={d} }} on-error={{}}\n')
-        rsc.write(':delay 5s;\n')
+        rsc.write(':delay 10s;\n')
         rsc.write('/ip dns cache flush\n')
         rsc.write(':log info "Completed updating GFWLIST domain rules."\n')
     print(f'Successfully processed {len(result)} domains')
     print('Generated files: gfwlist_sld.txt, gfwlist7_domain.rsc')
     print(f'Extracted {len(result)} second-level domains. Saved to gfwlist_sld.txt')
+
 
