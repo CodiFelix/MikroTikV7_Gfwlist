@@ -52,10 +52,10 @@ echo "download.mikrotik.com" >> ${gfwlist_domain_filename}
 # RouterOS v7 gfwlist scripts
 sed -i 's/^/:do { add comment=Gfwlist type=FWD forward-to=8.8.8.8 match-subdomain=yes name=&/g' ${gfwlist_domain_filename}
 sed -i 's/$/&\ } on-error={}/g' ${gfwlist_domain_filename}
-sed -i '1 i/log info "Loading MikroTik v7 Gfwlist"' ${cn_ipv4_list_filename}
+sed -i '1 i/log info "Loading MikroTik v7 Gfwlist"' ${gfwlist_domain_filename}
 sed -i '2 i/ip dns static/remove [ find comment=Gfwlist ]' ${gfwlist_domain_filename}
 sed -i '3 i/ip dns static' ${gfwlist_domain_filename}
 sed -i '$a\:delay 3s;' ${gfwlist_domain_filename}
 sed -i '$a\/ip dns cache flush' ${gfwlist_domain_filename}
-sed -i '$a\:log info "Complete CN_IPv4_ROUTE !!"' ${cn_ipv4_route_filename}
+sed -i '$a\:log info "Complete CN_IPv4_ROUTE !!"' ${gfwlist_domain_filename}
 echo "Translation completed !!"
