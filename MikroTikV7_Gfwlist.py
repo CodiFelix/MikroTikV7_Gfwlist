@@ -10,12 +10,8 @@ def download_gfwlist():
     url = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
     output_file = 'base64.txt'
     
-    if os.path.exists(output_file):
-        print(f'{output_file} 已存在，跳过下载')
-        return
-    
     try:
-        print(f'正在下载 GFWList 源文件...')
+        print(f'正在下载最新的 GFWList 源文件...')
         urllib.request.urlretrieve(url, output_file)
         print(f'下载完成: {output_file}')
     except Exception as e:
