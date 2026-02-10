@@ -12,6 +12,10 @@ import urllib.request
 def download_gfwlist():
     url = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
     output_file = 'base64.txt'
+    # 删除旧文件，确保每次都重新下载
+    if os.path.exists(output_file):
+        os.remove(output_file)
+        print(f'Removed old {output_file}')
     try:
         print('Downloading latest GFWList source file...')
         urllib.request.urlretrieve(url, output_file)
