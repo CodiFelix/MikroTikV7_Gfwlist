@@ -6,36 +6,33 @@ on:
     - cron: '0 2 * * *'
 
 permissions:
-  contents: write    # ✨ 给 contents 写权限
+  contents: write
 
 jobs:
-  build:
+  update-gfwlist:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出仓库
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: 设置Python环境
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pip install tldextract
 
-      - name: 下载 gfwlist
-        run: wget -O base64.txt https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
-
-      - name: 运行你的MikroTikV7_Gfwlist.py脚本
+      - name: Run script to update gfwlist domains
         run: python MikroTikV7_Gfwlist.py
 
-      - name: 配置git
+      - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: 提交和推送变更
+      - name: Commit and push changes
         run: |
           git add gfwlist_sld.txt gfwlist7_domain.rsc
-          git commit -m "Auto update gfwlist at $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git commit -m "Auto update GFWList domains [skip ci]" || echo "No changes to commit"
           git push
