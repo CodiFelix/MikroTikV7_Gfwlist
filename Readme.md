@@ -9,7 +9,7 @@
 ### 📥 直接导入 GFWList DNS 规则
 
 ```routeros
-/tool/fetch url="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/Result/gfwlist7_domain.rsc" mode=https dst-path=gfwlist7_domain.rsc
+/tool/fetch url="https://raw.githubusercontent.com/ITinflect-Ctrl/MikroTikV7_Gfwlist/main/gfwlist7_domain.rsc" mode=https dst-path=gfwlist7_domain.rsc
 :delay 15s
 /import gfwlist7_domain.rsc
 ```
@@ -21,7 +21,7 @@
 ```routeros
 /system scheduler
 add name=update-gfwlist interval=7d start-date=2026-02-10 start-time=03:00:00 \
-on-event="/tool/fetch url=\"https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/Result/gfwlist7_domain.rsc\" mode=https dst-path=gfwlist7_domain.rsc\r\
+on-event="/tool/fetch url=\"https://raw.githubusercontent.com/ITinflect-Ctrl/MikroTikV7_Gfwlist/main/gfwlist7_domain.rsc\" mode=https dst-path=gfwlist7_domain.rsc\r\
 \n:delay 15s\r\
 \n/import gfwlist7_domain.rsc\r\
 \n/log info \"GFWList rules updated successfully\""
