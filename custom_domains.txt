@@ -1,0 +1,20 @@
+aaa.com 123.123.123.123
+bbb.com
+ccc.com
+ddd.com 114.114.114.114
+eee.com
+#fff.com
+hhh
+hhh
+123
+cn 114.114.114.114
+123-123
+hhh-123
+my-site
+abc.def
+example.com
+123.234.baidu.com
+sub.domain.example
+abc-123.def-456.com
+a.b.c.d.e.f.g
+123-456.hello-world.com
