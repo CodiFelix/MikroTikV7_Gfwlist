@@ -1,0 +1,41 @@
+name: MikroTikV7_Gfwlist_Scripts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: write    # ✨ 给 contents 写权限
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安装依赖
+        run: pip install tldextract
+
+      - name: 下载 gfwlist
+        run: wget -O base64.txt https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
+
+      - name: 运行你的gfw.py脚本
+        run: python gfw.py
+
+      - name: 配置git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 提交和推送变更
+        run: |
+          git add gfwlist_sld.txt gfwlist7_domain.rsc
+          git commit -m "Auto update gfwlist at $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
