@@ -119,7 +119,7 @@ if __name__ == '__main__':
     with open('gfwlist7_domain.rsc', 'w', encoding='utf-8') as rsc:
         create_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         rsc.write(f'### --- Created at: {create_time} --- ###\n')
-        rsc.write(f':log info "Starting to update GFWLIST domain rules..."\n')
+        rsc.write(f':log info "Starting to update MikroTik v7 GFWLIST domain rules..."\n')
         rsc.write('/ip dns static remove [find comment=Gfwlist]\n')
         rsc.write('/ip dns static\n')
         for d, ip in dedup_domains:
@@ -127,7 +127,8 @@ if __name__ == '__main__':
             rsc.write(f':do {{ add comment=Gfwlist type=FWD forward-to={fwd_ip} match-subdomain=yes name={d} }} on-error={{}}\n')
         rsc.write(':delay 5s;\n')
         rsc.write('/ip dns cache flush\n')
-        rsc.write(':log info "Completed updating GFWLIST domain rules."\n')
+        rsc.write(':log info "Completed updating MikroTik v7 GFWLIST domain rules."\n')
     print(f'Successfully processed {len(dedup_domains)} domains (custom first)')
     print('Generated files: gfwlist_sld.txt, gfwlist7_domain.rsc')
     print(f'Extracted {len(dedup_domains)} domains. Saved to gfwlist_sld.txt')
+
