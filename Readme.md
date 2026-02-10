@@ -57,6 +57,8 @@ on-event="/tool/fetch url=\"https://raw.githubusercontent.com/ITinflect-Ctrl/Mik
 - ✅ 支持子域名自动匹配
 - ✅ 自动清理 DNS 缓存
 - ✅ 详细的日志记录和时间戳
+- ✅ **支持自定义域名列表，可指定独立 DNS 服务器**
+- ✅ **支持自定义域名与 IP 映射（A记录）**
 
 ---
 
@@ -79,10 +81,14 @@ pip install tldextract
 ### 快速开始
 
 ```bash
-# 1. 运行生成脚本（会自动下载最新的 GFWList）
+# 1. （可选）创建自定义域名文件
+echo "nas.home 192.168.1.100" > custom_domains.txt
+echo "mysite.com 1.1.1.1" >> custom_domains.txt
+
+# 2. 运行生成脚本（会自动下载最新的 GFWList）
 python MikroTikV7_Gfwlist.py
 
-# 2. 查看生成的文件
+# 3. 查看生成的文件
 ls -l gfwlist7_domain.rsc gfwlist_sld.txt
 ```
 
@@ -100,6 +106,9 @@ curl -o base64.txt https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwl
 **主要输出**：
 - `gfwlist7_domain.rsc` - MikroTik RouterOS v7 导入脚本（包含完整的 DNS 转发规则）
 - `gfwlist_sld.txt` - 纯文本域名列表（用于检查和备份）
+
+**可选输入**：
+- `custom_domains.txt` - 自定义域名列表（支持 DNS 转发和 IP 映射）
 
 ### 导入到 MikroTik
 
@@ -130,10 +139,14 @@ ssh admin@192.168.88.1
 ### DNS 静态转发规则 (gfwlist7_domain.rsc)
 
 ```routeros
-### --- 创建时间: 2026-02-10 14:30:25 --- ###
-:log info "开始更新GFWLIST域名规则..."
+### --- Created at: 2026-02-10 14:30:25 --- ###
+:log info "Starting to update GFWLIST domain rules..."
 /ip dns static remove [find comment=Gfwlist]
 /ip dns static
+# 自定义域名（优先）
+:do { add comment=Gfwlist type=FWD forward-to=192.168.1.100 match-subdomain=yes name=nas.home } on-error={}
+:do { add comment=Gfwlist type=FWD forward-to=1.1.1.1 match-subdomain=yes name=mysite.com } on-error={}
+# GFWList 域名
 :do { add comment=Gfwlist type=FWD forward-to=8.8.8.8 match-subdomain=yes name=google.com } on-error={}
 :do { add comment=Gfwlist type=FWD forward-to=8.8.8.8 match-subdomain=yes name=youtube.com } on-error={}
 :do { add comment=Gfwlist type=FWD forward-to=8.8.8.8 match-subdomain=yes name=facebook.com } on-error={}
@@ -141,7 +154,7 @@ ssh admin@192.168.88.1
 ...（约 4000+ 条规则）
 :delay 5s;
 /ip dns cache flush
-:log info "完成更新GFWLIST域名规则."
+:log info "Completed updating GFWLIST domain rules."
 ```
 
 ### 域名列表文件 (gfwlist_sld.txt)
@@ -241,14 +254,44 @@ rsc.write(f':do {{ add comment=Gfwlist type=FWD forward-to=8.8.8.8,1.1.1.1 match
 rsc.write(f':do {{ add comment=CustomGFW type=FWD forward-to=8.8.8.8 match-subdomain=yes name={d} }} on-error={{}}\n')
 ```
 
-### 添加自定义域名
+### 添加自定义域名（推荐方式）
 
-在生成的 `.rsc` 文件末尾手动添加：
+创建 `custom_domains.txt` 文件，脚本会自动读取并优先处理：
 
-```routeros
-# 添加额外的域名
-:do { add comment=Gfwlist type=FWD forward-to=8.8.8.8 match-subdomain=yes name=mydomain.com } on-error={}
+```txt
+# 自定义域名列表
+# 支持两种配置方式：
+
+# 方式1: 仅域名（使用默认DNS 8.8.8.8）
+example.com
+custom.domain
+
+# 方式2: 域名 + 转发地址（指定DNS服务器或IP地址）
+mysite.com 1.1.1.1
+internal.local 192.168.1.100
+nas.home 10.0.0.50
+cdn.example.com 8.8.4.4
+
+# 注释行以 # 开头
+# 空行会被忽略
 ```
+
+**配置说明**：
+- **不带转发地址**：域名会使用默认 DNS 服务器（8.8.8.8）进行转发
+- **带转发地址**：可以指定任意 DNS 服务器或 IP 地址进行转发
+- 两种方式可以混合使用，灵活配置不同域名的转发策略
+
+**工作原理**：
+- 脚本会先读取 `custom_domains.txt`
+- 自定义域名会排在 GFWList 前面（优先级更高）
+- 自动去重，避免与 GFWList 冲突
+- 所有域名都以 DNS 转发方式处理（type=FWD）
+
+**使用场景**：
+- 添加 GFWList 中未包含的域名
+- 为特定域名指定不同的 DNS 服务器
+- 将内网域名转发到局域网 DNS 服务器（如 192.168.1.1）
+- 覆盖 GFWList 中的某些域名配置
 
 ---
 
@@ -481,5 +524,7 @@ Copyright (c) 2026 YOUR_NAME
 ---
 
 **最后更新**: 2026年2月10日  
-**脚本版本**: 1.0.0  
-**测试环境**: RouterOS v7.13
+**脚本版本**: 2.0.0  
+**测试环境**: RouterOS v7.13  
+**作者**: ITinflect-Ctrl  
+**仓库**: https://github.com/itinflect-Ctrl
