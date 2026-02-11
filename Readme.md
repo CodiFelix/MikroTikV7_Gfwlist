@@ -497,10 +497,8 @@ add chain=prerouting protocol=tcp layer7-protocol=gfw-domains action=add-dst-to-
 - 分享经验：Star 项目并分享给需要的人
 
 **联系方式**：
-- GitHub Issues: [提交问题](https://github.com/YOUR_USERNAME/YOUR_REPO/issues)
-- Email: your-email@example.com
-
-如果这个项目对您有帮助，请给个 Star ⭐！
+- GitHub Issues: [提交问题](https://github.com/CodiFelix/MikroTikV7_Gfwlist/issues)
+- Email: Codifelix@FelixBlaze.com
 
 ---
 
@@ -508,7 +506,7 @@ add chain=prerouting protocol=tcp layer7-protocol=gfw-domains action=add-dst-to-
 
 MIT License
 
-Copyright (c) 2026 YOUR_NAME
+Copyright (c) 2026 FelixBlaze
 
 本项目仅供学习和研究使用，请遵守当地法律法规。
 
@@ -529,4 +527,4 @@ Copyright (c) 2026 YOUR_NAME
 **脚本版本**: 2.0.0  
 **测试环境**: RouterOS v7.13  
 **作者**: CodiFelix
-**仓库**: https://github.com/CodiFelix
+**仓库**: https://github.com/CodiFelix/MikroTikV7_Gfwlist
