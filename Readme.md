@@ -502,13 +502,13 @@ add chain=prerouting protocol=tcp layer7-protocol=gfw-domains action=add-dst-to-
 
 ---
 
-## 📄 许可证
+## ⚖️ 许可证 (License)
 
-MIT License
+本项目采用 [MIT License](LICENSE) 授权。
 
 Copyright (c) 2026 FelixBlaze
 
-本项目仅供学习和研究使用，请遵守当地法律法规。
+> **注意：** 本项目仅供学习和研究使用，请在法律允许的范围内使用。作者不对任何因误用、非法使用或操作不当导致的后果承担法律责任。
 
 ---
 
