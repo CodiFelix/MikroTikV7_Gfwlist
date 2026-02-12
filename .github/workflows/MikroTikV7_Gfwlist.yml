@@ -35,4 +35,4 @@ jobs:
         run: |
           git add gfwlist_sld.txt gfwlist7_domain.rsc
           git commit -m "Auto update GFWList domains [skip ci]" || echo "No changes to commit"
-          git push
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/CodiFelix/MikroTikV7_Gfwlist.git HEAD:main
